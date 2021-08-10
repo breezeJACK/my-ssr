@@ -1,4 +1,4 @@
-export default {
+export default{
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'my-srr',
@@ -16,6 +16,30 @@ export default {
     ]
   },
 
+  server: {
+    port: 8000,
+    host: '127.0.0.1'
+  },
+  /*
+  ** Environment variable configuration
+  */
+  env: {
+    baseUrl: 'http://127.0.0.1:8000'
+  },
+    /*
+  ** Router configuration
+  */
+  router: {
+    extendRoutes (routes) {
+      routes.push({
+        path: '*',
+        redirect: {
+          name: 'login'
+        }
+      })
+    },
+    middleware:['auth']
+  },
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     'element-ui/lib/theme-chalk/index.css'
@@ -23,7 +47,9 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '@/plugins/element-ui'
+  '@/plugins/element-ui',
+  { src: '~/plugins/persistedstate', ssr: false }
+
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -39,10 +65,17 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    'cookie-universal-nuxt'
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     transpile: [/^element-ui/],
-  }
+  },
+  serverMiddleware: [
+    {
+      path: '/',
+      handler: '@/utils/serverMiddleware/pageCache.js',
+    },
+  ]
 }
