@@ -40,7 +40,7 @@ export default Vue.extend({
   methods: {
     login() {
       // todo 暂时假设成功
-      this.$store.state.usrInfo = this.usrInfo
+      this.$store.commit('changUsrInfo',this.usrInfo)
       this.$cookies.set('token', 'mockToken')
       this.$router.push('/')
     },
